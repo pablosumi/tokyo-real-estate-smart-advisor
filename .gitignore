@@ -1,0 +1,11 @@
+# config file
+env.json
+
+# notebooks
+notebooks/.ipynb_checkpoints/
+
+# data
+data/
+
+# misc
+.DS_Store
