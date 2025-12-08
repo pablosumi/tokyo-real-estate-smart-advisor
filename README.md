@@ -6,11 +6,11 @@ Coming soon.
 ```
 tokyo-real-estate-smart-advisor/
 ├── README.md
-├── env.json               
+├── env.json                       # git ignored       
 ├── .gitignore
-├── data/
-│   ├── tokyo.parquet      
-│   └── tokyo-clean.parquet
+├── data/                          # git ignored
+│   ├── tokyo.parquet              # raw MLIT data
+│   └── tokyo-clean.parquet        # cleaned MLIT data
 └── notebooks/
     ├── ingest.ipynb
     ├── clean.ipynb
