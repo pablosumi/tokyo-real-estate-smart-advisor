@@ -1,5 +1,6 @@
 # config file
 env.json
+.env
 
 # notebooks
 notebooks/.ipynb_checkpoints/
