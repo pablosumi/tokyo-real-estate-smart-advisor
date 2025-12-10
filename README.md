@@ -1,6 +1,6 @@
 # Tokyo Real Estate Smart Advisor
 
-Coming soon.
+Work in progress. Tokyo Real Estate Intelligence - ML Prediction & AI Assistant.
 
 ## Directory structure
 ```
