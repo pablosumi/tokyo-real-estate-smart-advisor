@@ -6,7 +6,7 @@ Coming soon.
 ```
 tokyo-real-estate-smart-advisor/
 ├── README.md
-├── env.json                       # git ignored       
+├── .env                           # git ignored       
 ├── .gitignore
 ├── data/                          # git ignored
 │   ├── tokyo.parquet              # raw MLIT data
@@ -15,16 +15,6 @@ tokyo-real-estate-smart-advisor/
     ├── ingest.ipynb
     ├── clean.ipynb
     └── EDA.ipynb
-```
-
-## Environment configuration
-- Create an `env.json` in the project root (already git-ignored) with your MLIT API key.
-- Example structure (replace the placeholder with your key):
-
-```json
-{
-  "MLIT_API_KEY": "your-mlit-api-key"
-}
 ```
 
 ## Data
