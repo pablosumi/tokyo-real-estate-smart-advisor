@@ -8,13 +8,13 @@ tokyo-real-estate-smart-advisor/
 ├── .venv/                          # git ignored (local Python virtual env)
 ├── data/                           # git ignored
 │   ├── tokyo-clean.parquet         # cleaned MLIT data
-│   ├── tokyo-preprocessed.parquet  # preprocessed MLIT data for XGBoost (stateless transformations)
+│   ├── tokyo-preprocessed.parquet  # preprocessed MLIT data for XGBoost (stateless)
 │   └── tokyo.parquet               # raw MLIT data
 ├── notebooks/
 │   ├── clean.ipynb                 # cleaning raw data
 │   ├── EDA.ipynb                   # exploratory data analysis
 │   ├── ingest.ipynb                # ingesting raw data from MLIT
-│   └── preprocessing_xgb.ipynb     # stateless preproccesing for XGBoost
+│   └── preprocessing_xgb.ipynb     # stateless preprocsesing for XGBoost
 ├── scripts/
 │   └── ingest.py                   # streamed data pull from MLIT -> tokyo.parquet
 ├── .env                            # git ignored (MLIT api key)
