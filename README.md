@@ -14,6 +14,7 @@ tokyo-real-estate-smart-advisor/
 │   ├── clean.ipynb                 # cleaning raw data
 │   ├── EDA.ipynb                   # exploratory data analysis
 │   ├── ingest.ipynb                # ingesting raw data from MLIT
+│   ├── modeling_xgb.ipynb          # XGBoost experimentation
 │   └── preprocessing_xgb.ipynb     # stateless preprocsesing for XGBoost
 ├── scripts/
 │   └── ingest.py                   # streamed data pull from MLIT -> tokyo.parquet
