@@ -11,6 +11,7 @@ tokyo-real-estate-smart-advisor/
 │   ├── tokyo-preprocessed.parquet  # preprocessed MLIT data for XGBoost (stateless)
 │   └── tokyo.parquet               # raw MLIT data
 ├── logs/                           # git ignored
+│   ├── tokyo-preprocessed.parquet  # execution history (timestamps, row counts)
 │   └── ingest.log                  # execution history (timestamps, row counts)
 ├── notebooks/
 │   ├── clean.ipynb                 # cleaning raw data
@@ -19,12 +20,14 @@ tokyo-real-estate-smart-advisor/
 │   ├── modeling_xgb.ipynb          # XGBoost experimentation
 │   └── preprocessing_xgb.ipynb     # stateless preprocsesing for XGBoost
 ├── scripts/
+│   ├── clean.py                    # applies cleaning -> tokyo-clean.parquet
 │   └── ingest.py                   # streamed data pull from MLIT -> tokyo.parquet
 ├── src/
 │   ├── __pycache__/                # git ignored
 │   ├── __init__.py
 │   ├── api.py                      # MLIT API wrapper (auth, data fetching)                  
-│   └── config.py                   # project constants (URLs, defaults, pref codes)
+│   ├── config.py                   # project constants (URLs, defaults, pref codes)                 
+│   └── processing.py               # cleaning logic
 ├── .env                            # git ignored (MLIT api key)
 ├── .gitattributes
 ├── .gitignore
