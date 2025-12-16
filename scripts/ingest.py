@@ -14,8 +14,20 @@ sys.path.append(str(project_root))
 from src.config import START_YEAR
 from src.api import get_api_key, fetch_year_data
 
-# --- Logging ---
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+# --- Logging Setup ---
+# Create a 'logs' directory in the project root if it doesn't exist
+log_dir = project_root / "logs"
+log_dir.mkdir(exist_ok=True)
+
+# Configure logging to write to BOTH a file and the console
+logging.basicConfig(
+    level=logging.INFO, 
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(log_dir / "ingest.log"),  # Write to disk
+        logging.StreamHandler(sys.stdout)             # Write to terminal
+    ]
+)
 logger = logging.getLogger(__name__)
 
 def main():
@@ -33,7 +45,6 @@ def main():
     logger.info(f"Starting streamed ingestion to {output_file}...")
 
     try:
-
         # Query data one year at a time
         for year in range(START_YEAR, current_year + 1):
             
