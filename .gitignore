@@ -11,9 +11,13 @@ notebooks/.ipynb_checkpoints/
 # data
 data/
 
-# misc
-.DS_Store
-
 # --- System & Python ---
 __pycache__/
 *.pyc
+
+# --- Logs ---
+logs/
+*.log
+
+# misc
+.DS_Store
