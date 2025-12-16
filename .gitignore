@@ -1,6 +1,9 @@
 # config file
 env.json
 .env
+.venv/
+env/
+venv/
 
 # notebooks
 notebooks/.ipynb_checkpoints/
@@ -11,5 +14,6 @@ data/
 # misc
 .DS_Store
 
-# python virtual environments
-.venv/
+# --- System & Python ---
+__pycache__/
+*.pyc
