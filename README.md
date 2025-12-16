@@ -11,8 +11,8 @@ tokyo-real-estate-smart-advisor/
 │   ├── tokyo-preprocessed.parquet  # preprocessed MLIT data for XGBoost (stateless)
 │   └── tokyo.parquet               # raw MLIT data
 ├── logs/                           # git ignored
-│   ├── tokyo-preprocessed.parquet  # execution history (timestamps, row counts)
-│   └── ingest.log                  # execution history (timestamps, row counts)
+│   ├── clean.log                   # clean execution history (timestamps, row counts)
+│   └── ingest.log                  # ingest execution history (timestamps, row counts)
 ├── notebooks/
 │   ├── clean.ipynb                 # cleaning raw data
 │   ├── EDA.ipynb                   # exploratory data analysis
