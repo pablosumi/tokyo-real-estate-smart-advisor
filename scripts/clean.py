@@ -8,7 +8,7 @@ project_root = Path(__file__).resolve().parent.parent
 sys.path.append(str(project_root))
 
 # Import the processing functions
-from src.processing import (
+from src.cleaning_utils import (
     initial_clean,
     filter_residential,
     map_municipalities,

@@ -27,7 +27,7 @@ tokyo-real-estate-smart-advisor/
 │   ├── __init__.py
 │   ├── api.py                      # MLIT API wrapper (auth, data fetching)                  
 │   ├── config.py                   # project constants (URLs, defaults, pref codes)                 
-│   └── processing.py               # cleaning logic
+│   └── cleaning_utils.py           # cleaning logic
 ├── .env                            # git ignored (MLIT api key)
 ├── .gitattributes
 ├── .gitignore
