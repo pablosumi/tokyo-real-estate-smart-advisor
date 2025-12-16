@@ -18,6 +18,11 @@ tokyo-real-estate-smart-advisor/
 │   └── preprocessing_xgb.ipynb     # stateless preprocsesing for XGBoost
 ├── scripts/
 │   └── ingest.py                   # streamed data pull from MLIT -> tokyo.parquet
+├── src/
+│   ├── __pycache__/                # git ignored
+│   ├── __init__.py
+│   ├── api.py                      # MLIT API wrapper (auth, data fetching)                  
+│   └── config.py                   # project constants (URLs, defaults, pref codes)
 ├── .env                            # git ignored (MLIT api key)
 ├── .gitattributes
 ├── .gitignore
