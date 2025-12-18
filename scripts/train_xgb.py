@@ -26,7 +26,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(os.path.join(LOG_DIR, 'train.log'), mode='a'),
+        logging.FileHandler(os.path.join(LOG_DIR, 'train_xgb.log'), mode='a'),
         logging.StreamHandler(sys.stdout)
     ]
 )
