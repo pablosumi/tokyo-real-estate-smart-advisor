@@ -11,11 +11,14 @@ notebooks/.ipynb_checkpoints/
 # data
 data/
 
-# --- System & Python ---
+# models
+models/
+
+# system & python
 __pycache__/
 *.pyc
 
-# --- Logs ---
+# logs
 logs/
 *.log
 
