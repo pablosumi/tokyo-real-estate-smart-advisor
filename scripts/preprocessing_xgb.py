@@ -42,7 +42,7 @@ if not logger.handlers:
 
 
 def main():
-    logger.info("🚀 Starting Preprocessing Pipeline...")
+    logger.info("Starting Preprocessing Pipeline...")
     logger.info(f"Writing logs to: {LOG_FILE}")
 
     # 1. Load Data
