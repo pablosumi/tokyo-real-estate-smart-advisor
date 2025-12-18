@@ -13,7 +13,8 @@ tokyo-real-estate-smart-advisor/
 ├── logs/                             # git ignored
 │   ├── clean.log                     # clean execution history (timestamps, row counts)
 │   ├── ingest.log                    # ingest execution history (timestamps, row counts)
-│   └── preprocessing_xgb.log         # preprocessing execution history (timestamps, features)
+│   ├── preprocessing_xgb.log         # preprocessing execution history (timestamps, features)
+│   └── train_xgb.log                 # xgb re-training history (timestamps, evals)
 ├── models/                           # git ignored
 │   ├── best_hyperparameters_xgb.json
 │   └── tokyo_mass_market_xgb.pkl     # xgboost trained on all mass market data
@@ -26,13 +27,14 @@ tokyo-real-estate-smart-advisor/
 ├── scripts/
 │   ├── clean.py                      # applies cleaning -> tokyo-clean.parquet
 │   ├── ingest.py                     # streamed data pull from MLIT -> tokyo.parquet
-│   └── preprocessing_xgb.py          # adds features for xgb -> tokyo-preprocessed.parquet
+│   ├── preprocessing_xgb.py          # adds features for xgb -> tokyo-preprocessed.parquet
+│   └── train_xgb.py                  # xgb re-training pipeline -> tokyo_mass_market_xgb.pkl
 ├── src/
 │   ├── __pycache__/                  # git ignored
 │   ├── __init__.py
 │   ├── api.py                        # MLIT API wrapper (auth, data fetching)                  
 │   ├── cleaning_utils.py             # cleaning logic
-│   ├── config.py                     # project constants (URLs, defaults, pref codes)     
+│   ├── config.py                     # project constants (URLs, defaults, pref codes, paths)
 │   └── features.py                   # feature engineering logic
 ├── .env                              # git ignored (MLIT api key)
 ├── .gitattributes
