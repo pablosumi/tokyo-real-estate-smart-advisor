@@ -17,6 +17,7 @@ tokyo-real-estate-smart-advisor/
 │   └── train_xgb.log                 # xgb re-training history (timestamps, evals)
 ├── models/                           # git ignored
 │   ├── best_hyperparameters_xgb.json
+│   ├── model_history.csv             # history of re-trained models' eval metrics
 │   └── tokyo_mass_market_xgb.pkl     # xgboost trained on all mass market data
 ├── notebooks/
 │   ├── clean.ipynb                   # cleaning raw data
