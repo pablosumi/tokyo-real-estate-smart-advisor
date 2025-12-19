@@ -83,10 +83,10 @@ def main():
             col1, col2 = st.columns(2)
             with col1:
 
-                total_floor_area = st.number_input("Total Floor Area (m²)", min_value=0.0, value=95.0)
+                total_floor_area = st.number_input("Total Floor Area (m²)", min_value=1.0, value=65.0)
 
             with col2:
-                structure = st.selectbox("Structure", options=['RC', 'SRC', None, 'W', 'S', 'RC, W', 'RC, S', 'SRC, RC', 'LS',
+                structure = st.selectbox("Structure", options=[None, 'RC', 'SRC', 'W', 'S', 'RC, W', 'RC, S', 'SRC, RC', 'LS',
                                                                 'S, W', 'B', 'RC, W, B', 'W, LS', 'RC, S, W', 'RC, LS', 'SRC, W',
                                                                 'S, B', 'SRC, S', 'W, B', 'B, LS', 'S, W, LS', 'RC, B', 'S, LS',
                                                                 'S, W, B', 'RC, S, LS'])
@@ -99,7 +99,7 @@ def main():
                                                                 'Semi-trapezoidal Shaped', 'Square Shaped', 'Semi-shaped',
                                                                 '&quot;Flag-shaped&quot; etc.'])
                 frontage = st.number_input("Frontage (m)", min_value=0.0, max_value=50.0, value=10.0)
-                breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=0.0)
+                breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=4.0)
                 road_direction = st.selectbox("Road Direction", options=[None, 'East', 'No facing road', 'North', 'Northeast',
                                                                         'Northwest', 'South', 'Southeast', 'Southwest', 'West'])
             with col2:
