@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from src.inference import make_prediction
+import altair as alt
 
 # --- PAGE CONFIG ---
 st.set_page_config(
@@ -157,9 +158,36 @@ def main():
     with price_chart_container:
         st.subheader("Median Transaction Price by Year")
         if not median_price.empty:
-            st.line_chart(median_price, x="TransactionYear", y="TradePriceYen")
+            # 1. Define the selection (hover) behavior
+            hover = alt.selection_point(
+                fields=["TransactionYear"],
+                nearest=True,
+                on="mouseover",
+                empty=False,
+            )
+
+            # 2. Base encoding
+            base = alt.Chart(median_price).encode(
+                x=alt.X("TransactionYear:Q", axis=alt.Axis(format="d", labelAngle=0), title="Year"),
+                y=alt.Y("TradePriceYen:Q", title="Median Price (¥)")
+            )
+
+            # 3. The Line
+            line = base.mark_line()
+
+            # 4. The selector dot (now filled)
+            points = base.mark_point(filled=True, size=100).encode( # added filled=True
+                opacity=alt.condition(hover, alt.value(1), alt.value(0)),
+                tooltip=[
+                    alt.Tooltip("TransactionYear:Q", title="Year", format="d"),
+                    alt.Tooltip("TradePriceYen:Q", title="Price", format=",")
+                ]
+            ).add_params(hover)
+
+            # 5. Combine and display
+            st.altair_chart(line + points, use_container_width=True)
         else:
-            st.info("No transaction data available for the selected municipality.")
+            st.info("No transaction data available.")
 
     if submit:
         try:
