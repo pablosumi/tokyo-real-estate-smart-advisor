@@ -5,6 +5,8 @@ Work in progress. Tokyo Real Estate Intelligence: ML Prediction & AI Assistant.
 ## Directory structure
 ```
 tokyo-real-estate-smart-advisor/
+├── .streamlit/                       
+│   └── config.toml                   # streamlit config
 ├── .venv/                            # git ignored (local Python virtual env)
 ├── data/                             # git ignored
 │   ├── tokyo-clean.parquet           # cleaned MLIT data
@@ -41,6 +43,7 @@ tokyo-real-estate-smart-advisor/
 ├── .env                              # git ignored (MLIT api key)
 ├── .gitattributes
 ├── .gitignore
+├── dashboard.py                      # streamlit dashboard logic
 ├── README.md
 └── requirements.txt                  # Python dependencies
 ```
