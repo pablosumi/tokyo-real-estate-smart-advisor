@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+from pathlib import Path
 from src.inference import make_prediction
 
 # --- PAGE CONFIG ---
@@ -10,9 +11,23 @@ st.set_page_config(
     layout="wide"
 )
 
+DATA_PATH = Path(__file__).resolve().parent / "data" / "tokyo-clean.parquet"
+
+
+@st.cache_data
+def load_transaction_data() -> pd.DataFrame:
+    return pd.read_parquet(
+        DATA_PATH,
+        columns=["Municipality", "TransactionYear", "TradePriceYen"]
+    )
+
+
 def main():
     st.title("Tokyo Real Estate Smart Advisor")
     st.caption("Estimate property market value using MLIT historical transactions")
+
+    transactions = load_transaction_data()
+    price_chart_container = st.container()
 
     with st.form("valuation_form"):
         tab1, tab2, tab3 = st.tabs(["Context & Usage", "Building Specs", "Land & Zoning"])
@@ -131,6 +146,20 @@ def main():
         'CoverageRatio': coverage_ratio,
         'FloorAreaRatio': floor_area_ratio
     }
+
+    median_price = (
+        transactions[transactions["Municipality"] == municipality]
+        .groupby("TransactionYear", as_index=False)["TradePriceYen"]
+        .median()
+        .sort_values("TransactionYear")
+    )
+
+    with price_chart_container:
+        st.subheader("Median Transaction Price by Year")
+        if not median_price.empty:
+            st.line_chart(median_price, x="TransactionYear", y="TradePriceYen")
+        else:
+            st.info("No transaction data available for the selected municipality.")
 
     if submit:
         try:
