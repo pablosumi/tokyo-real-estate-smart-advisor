@@ -36,7 +36,8 @@ tokyo-real-estate-smart-advisor/
 │   ├── api.py                        # MLIT API wrapper (auth, data fetching)                  
 │   ├── cleaning_utils.py             # cleaning logic
 │   ├── config.py                     # project constants (URLs, defaults, pref codes, paths)
-│   └── features.py                   # feature engineering logic
+│   ├── features.py                   # feature engineering logic
+│   └── inference.py                  # predict with tokyo_mass_market_xgb.pkl trained xgboost model
 ├── .env                              # git ignored (MLIT api key)
 ├── .gitattributes
 ├── .gitignore
