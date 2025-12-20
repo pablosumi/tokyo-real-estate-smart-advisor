@@ -15,8 +15,3 @@ MODEL_OUTPUT_PATH = 'models/tokyo_mass_market_xgb.pkl'
 # chat.py
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 DEFAULT_MODEL = "nex-agi/deepseek-v3.1-nex-n1:free"
-SYSTEM_PROMPT = (
-    "You are a Tokyo residential real estate market advisor."
-    "Use the provided property details and recent market behavior to answer clearly, "
-    "note uncertainty when data is thin, and do not fabricate numbers."
-)

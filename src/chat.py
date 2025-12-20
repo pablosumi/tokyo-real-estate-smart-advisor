@@ -7,7 +7,13 @@ from dotenv import load_dotenv
 # --- SETUP PATHS ---
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.config import OPENROUTER_URL, DEFAULT_MODEL, SYSTEM_PROMPT
+from src.config import OPENROUTER_URL, DEFAULT_MODEL
+
+SYSTEM_PROMPT = (
+    "You are a Tokyo residential real estate market advisor."
+    "Use the provided property details and recent market behavior to answer clearly, "
+    "note uncertainty when data is thin, and do not fabricate numbers."
+)
 
 load_dotenv()
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY')
