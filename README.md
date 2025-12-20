@@ -1,6 +1,35 @@
 # Tokyo Real Estate Smart Advisor
+Machine learning pipeline and Streamlit dashboard with LLM interactivity for Tokyo residential price intelligence. It estimates market value with an XGBoost model, shows historical transaction prices, and lets you chat with an AI advisor via the OpenRouter API.
 
-Work in progress. Tokyo Real Estate Intelligence: ML Prediction & AI Assistant.
+## Highlights
+- Data ingestion from the MLIT Real Estate Information Library, plus cleaning and feature engineering tailored to residential properties.
+- XGBoost training pipeline with target encoding, logged health checks, and packaged artifacts (`models/tokyo_mass_market_xgb.pkl`).
+- Streamlit app (`dashboard.py`) that loads the trained model to estimate prices, charts transaction history, and provides an OpenRouter-powered chat assistant.
+- Parquet-based data flow: raw -> cleaned -> model-ready. Logs, data, and model artifacts live in git-ignored folders.
+
+## Quick start
+1) Python 3.11+ recommended. Create a virtualenv and install dependencies:
+```bash
+pip install -r requirements.txt
+```
+2) Add a `.env` file with required keys:
+```bash
+MLIT_API_KEY=your_mlit_key        # needed for data ingestion from MLIT
+OPENROUTER_API_KEY=your_key       # needed for dashboard chat feature
+```
+3) Build data and the model (outputs land in `data/` and `models/`):
+```bash
+python scripts/ingest.py             # raw MLIT pulls -> data/tokyo.parquet
+python scripts/clean.py              # cleaning/filtering -> data/tokyo-clean.parquet
+python scripts/preprocessing_xgb.py  # feature engineering -> data/tokyo-preprocessed.parquet
+python scripts/train_xgb.py          # trains & packages artifacts -> models/tokyo_mass_market_xgb.pkl
+```
+
+4) Run the Streamlit dashboard:
+```bash
+streamlit run dashboard.py
+```
+   - The app reads `data/tokyo-clean.parquet` for price charts and `models/tokyo_mass_market_xgb.pkl` for predictions.
 
 ## Directory structure
 ```
@@ -49,7 +78,13 @@ tokyo-real-estate-smart-advisor/
 └── requirements.txt                  # Python dependencies
 ```
 
-## Data
-- Source: Ministry of Land, Infrastructure, Transport and Tourism (MLIT) Real Estate Information Library (国土交通省不動産情報ライブラリ) (`reinfolib`) endpoint 4.
-- API docs: https://www.reinfolib.mlit.go.jp/help/apiManual/
-- Data artifacts live in `data/` as parquet exports.
+## Repo layout
+- `dashboard.py` — Streamlit UI for valuation, charts, and LLM chat.
+- `scripts/` — ingestion, cleaning, preprocessing, and XGBoost training entry points.
+- `src/` — API client, feature engineering, inference wrapper, and chat helper.
+- `data/`, `models/`, `logs/` — git-ignored artifacts created by the pipelines.
+- `notebooks/` — jupyter notebooks for ingestion, cleaning, EDA, and modeling.
+
+## Notes
+- Data source: Ministry of Land, Infrastructure, Transport and Tourism (MLIT) Real Estate Information Library (国土交通省不動産情報ライブラリ) (reinfolib) endpoint 4. (https://www.reinfolib.mlit.go.jp/help/apiManual/).
+- The OpenRouter model used by default is set in `src/config.py`; override via the `model` parameter in `get_chat_completion` if desired.
