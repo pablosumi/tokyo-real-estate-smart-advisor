@@ -20,13 +20,59 @@ DATA_PATH = Path(__file__).resolve().parent / "data" / "tokyo-clean.parquet"
 def load_transaction_data() -> pd.DataFrame:
     return pd.read_parquet(
         DATA_PATH,
-        columns=["Municipality", "TransactionYear", "TradePriceYen"]
+        columns=["Municipality", "FloorPlan", "TransactionYear", "TradePriceYen"]
     )
 
+STRUCTURE_LABELS = {
+    'RC': 'Reinforced Concrete',
+    'SRC': 'Steel Reinforced Concrete',
+    'W': 'Wood',
+    'S': 'Steel Frame',
+    'LS': 'Light Gauge Steel',
+    'B': 'Concrete Block',
+    'RC, W': 'RC & Wood mix',
+    'RC, S': 'RC & Steel mix',
+    'SRC, RC': 'SRC & RC mix',
+    'S, W': 'Steel & Wood mix',
+    'RC, W, B': 'RC, Wood, & Block',
+    'W, LS': 'Wood & Light Steel',
+    'RC, S, W': 'RC, Steel, & Wood',
+    'RC, LS': 'RC & Light Steel',
+    'SRC, W': 'SRC & Wood',
+    'S, B': 'Steel & Block',
+    'SRC, S': 'SRC & Steel',
+    'W, B': 'Wood & Block',
+    'B, LS': 'Block & Light Steel',
+    'S, W, LS': 'Steel, Wood, & Light Steel',
+    'RC, B': 'RC & Block',
+    'S, LS': 'Steel & Light Steel',
+    'S, W, B': 'Steel, Wood, & Block',
+    'RC, S, LS': 'RC, Steel, & Light Steel',
+    None: 'Unknown'
+}
+
+ORDERED_FLOOR_PLANS = [
+    None,
+    # 1 Room / Studios
+    '1R', '1R+S', '1K', '1K+S', '1DK', '1DK+S', '1L', '1L+S', '1LD+S', '1LK', '1LK+S', '1LDK', '1LDK+K', '1LDK+S',
+    # 2 Rooms
+    '2K', '2K+S', '2DK', '2DK+S', '2LD', '2LD+S', '2LK', '2LK+S', '2L+S', '2LDK', '2LDK+S',
+    # 3 Rooms
+    '3K', '3K+S', '3DK', '3DK+S', '3LD', '3LD+S', '3LK', '3LK+S', '3LDK', '3LDK+K', '3LDK+S',
+    # 4 Rooms
+    '4K', '4K+S', '4DK', '4DK+S', '4LK', '4L+K', '4LDK', '4LDK+S',
+    # 5 Rooms
+    '5K', '5K+S', '5DK', '5DK+S', '5LK', '5LDK', '5LDK+S',
+    # 6+ Rooms
+    '6K', '6K+S', '6DK', '6DK+S', '6LK', '6LDK', '6LDK+S',
+    '7DK', '7LDK', '7LDK+S', '8LDK', '8LDK+S',
+    # Special Types
+    'Studio Apartment', 'Open Floor', 'Duplex'
+]
 
 def main():
     st.title("Tokyo Real Estate Smart Advisor")
-    st.caption("Estimate property market value using MLIT historical transactions")
+    #st.caption("Estimate property market value using MLIT historical transactions")
 
     transactions = load_transaction_data()
     price_chart_container = st.container()
@@ -75,13 +121,7 @@ def main():
                         '八丈町 (Hachijo Town)', '小笠原村 (Ogasawara Village)'
                     ])
                 
-                floor_plan = st.selectbox("Floor Plan", options=['1DK', '1DK+S', '1K', '1K+S', '1L', '1L+S', '1LD+S', '1LDK', '1LDK+K', '1LDK+S',
-                                                                 '1LK', '1LK+S', '1R', '1R+S', '2DK', '2DK+S', '2K', '2K+S', '2L+S', '2LD', '2LD+S',
-                                                                 '2LDK', '2LDK+S', '2LK', '2LK+S', '3DK', '3DK+S', '3K', '3K+S', '3LD', '3LD+S',
-                                                                 '3LDK', '3LDK+K', '3LDK+S', '3LK', '3LK+S', '4DK', '4DK+S', '4K', '4K+S', '4L+K',
-                                                                 '4LDK', '4LDK+S', '4LK', '5DK', '5DK+S', '5K', '5K+S', '5LDK', '5LDK+S', '5LK',
-                                                                 '6DK', '6DK+S', '6K', '6K+S', '6LDK', '6LDK+S', '6LK', '7DK', '7LDK', '7LDK+S',
-                                                                 '8LDK', '8LDK+S', 'Duplex', 'Open Floor', 'Studio Apartment', None])
+                floor_plan = st.selectbox("Floor Plan", options=ORDERED_FLOOR_PLANS, index=12)
 
             with col2:
                 building_year = st.number_input("Building Construction Year", min_value=1945, max_value=2030, value=2003)
@@ -97,16 +137,13 @@ def main():
 
                 region = st.selectbox("Region", options=[None, 'Commercial Area', 'Industrial Area', 'Potential Residential Area', 'Residential Area'])
 
-                structure = st.selectbox("Structure", options=[None, 'RC', 'SRC', 'W', 'S', 'RC, W', 'RC, S', 'SRC, RC', 'LS',
-                                                                'S, W', 'B', 'RC, W, B', 'W, LS', 'RC, S, W', 'RC, LS', 'SRC, W',
-                                                                'S, B', 'SRC, S', 'W, B', 'B, LS', 'S, W, LS', 'RC, B', 'S, LS',
-                                                                'S, W, B', 'RC, S, LS'])
+                structure = st.selectbox("Structure", options=list(STRUCTURE_LABELS.keys()), index=24, format_func=lambda x: STRUCTURE_LABELS.get(x, x), help="RC and SRC are common for apartments; W is common for houses."
+)
                 
-                land_shape = st.selectbox("Land Shape", options=[None, 'Irregular Shaped', 'Semi-rectangular Shaped',
-                                                                'Rectangular Shaped', 'Trapezoidal Shaped', 'Semi-square Shaped',
-                                                                'Semi-trapezoidal Shaped', 'Square Shaped', 'Semi-shaped'])
+                land_shape = st.selectbox("Land Shape", options=[None, 'Irregular Shaped','Rectangular Shaped','Semi-rectangular Shaped','Semi-shaped',
+                                                                'Semi-square Shaped', 'Semi-trapezoidal Shaped', 'Square Shaped', 'Trapezoidal Shaped'])
                 
-                road_direction = st.selectbox("Road Direction", options=[None, 'East', 'No facing road', 'North', 'Northeast',
+                road_direction = st.selectbox("Road Direction", options=[None, 'No facing road', 'East', 'North', 'Northeast',
                                                                         'Northwest', 'South', 'Southeast', 'Southwest', 'West'])
                 
                 classification = st.selectbox("Road Classification", options=[None, 'Access Road', 'Agricultural Road', 'City Road', 'Forest Road',
@@ -117,9 +154,9 @@ def main():
 
             with col2:
                 
-                total_floor_area = st.number_input("Total Floor Area (m²)", min_value=1.0, value=310.0)
-                frontage = st.number_input("Frontage (m)", min_value=0.0, max_value=50.0, value=10.0)
-                breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=4.0)
+                total_floor_area = st.number_input("Total Floor Area (m²)", min_value=1.0, value=200.0)
+                frontage = st.number_input("Frontage (m)", min_value=0.0, max_value=50.0, value=7.5)
+                breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=8.0)
                 coverage_ratio = st.slider("Coverage Ratio (%)", 0, 500, 60)
                 floor_area_ratio = st.slider("Floor Area Ratio (%)", 0, 1300, 200)
 
@@ -146,15 +183,17 @@ def main():
         'TransactionYear': date.today().year
     }
 
+    print("columnszzz:",transactions.columns)
+
     median_price = (
-        transactions[transactions["Municipality"] == municipality]
+        transactions[(transactions["Municipality"] == municipality) & (transactions["FloorPlan"] == floor_plan)]
         .groupby("TransactionYear", as_index=False)["TradePriceYen"]
         .median()
         .sort_values("TransactionYear")
     )
 
     with price_chart_container:
-        st.subheader("Median Transaction Price by Year")
+        st.subheader("Median Transaction Price by Year:\n" + municipality + ", " + floor_plan)
         if not median_price.empty:
             # 1. Define the selection (hover) behavior
             hover = alt.selection_point(
