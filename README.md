@@ -36,6 +36,7 @@ tokyo-real-estate-smart-advisor/
 │   ├── __pycache__/                  # git ignored
 │   ├── __init__.py
 │   ├── api.py                        # MLIT API wrapper (auth, data fetching)                  
+│   ├── chat.py                       # OpenRouter LLM functionality for dashboard chatbox
 │   ├── cleaning_utils.py             # cleaning logic
 │   ├── config.py                     # project constants (URLs, defaults, pref codes, paths)
 │   ├── features.py                   # feature engineering logic
