@@ -74,6 +74,47 @@ def main():
     st.title("Tokyo Real Estate Smart Advisor")
     #st.caption("Estimate property market value using MLIT historical transactions")
 
+    # CSS for chatbox UI
+    st.markdown("""
+            <style>
+                /* 1. Hide all chat icons/avatars */
+                [data-testid="stChatMessageAvatarUser"],
+                [data-testid="stChatMessageAvatarAssistant"] {
+                    display: none;
+                }
+
+                /* 2. Reset padding for all messages now that icons are gone */
+                [data-testid="stChatMessage"] {
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                }
+
+                /* 3. Right-align the User message container */
+                [data-testid="stChatMessageUser"] {
+                    display: flex;
+                    flex-direction: row-reverse;
+                    text-align: right;
+                    background-color: transparent; /* Optional: makes it look cleaner */
+                }
+
+                /* 4. Ensure the text inside the user message takes up only as much space as needed */
+                [data-testid="stChatMessageUser"] .stChatMessageContent {
+                    margin-left: auto;
+                    background-color: #f0f2f6; /* Light grey bubble for user */
+                    border-radius: 15px;
+                    padding: 10px 15px;
+                }
+
+                /* 5. Assistant message styling (Left-aligned) */
+                [data-testid="stChatMessageAssistant"] .stChatMessageContent {
+                    margin-right: auto;
+                    background-color: #e1f5fe; /* Soft blue bubble for assistant */
+                    border-radius: 15px;
+                    padding: 10px 15px;
+                }
+            </style>
+        """, unsafe_allow_html=True)
+
     transactions = load_transaction_data()
     price_chart_container = st.container()
 
@@ -193,38 +234,81 @@ def main():
     )
 
     with price_chart_container:
-        st.subheader("Median Transaction Price by Year:\n" + municipality + ", " + floor_plan)
-        if not median_price.empty:
-            # 1. Define the selection (hover) behavior
-            hover = alt.selection_point(
-                fields=["TransactionYear"],
-                nearest=True,
-                on="mouseover",
-                empty=False,
-            )
+            # Create two columns with equal width (1:1 ratio)
+            col_chart, col_chat = st.columns([1, 1])
 
-            # 2. Base encoding
-            base = alt.Chart(median_price).encode(
-                x=alt.X("TransactionYear:Q", axis=alt.Axis(format="d", labelAngle=0), title="Year"),
-                y=alt.Y("TradePriceYen:Q", title="Median Price (¥)")
-            )
+            with col_chart:
+                st.subheader(f"Median Transaction Price By Year\n {municipality}, {floor_plan}")
+                if not median_price.empty:
+                    hover = alt.selection_point(
+                        fields=["TransactionYear"],
+                        nearest=True,
+                        on="mouseover",
+                        empty=False,
+                    )
 
-            # 3. The Line
-            line = base.mark_line()
+                    base = alt.Chart(median_price).encode(
+                        x=alt.X("TransactionYear:Q", axis=alt.Axis(format="d", labelAngle=0), title=None),
+                        y=alt.Y(
+                            "TradePriceYen:Q", 
+                            axis=alt.Axis(
+                                # This expression prepends ¥ and formats the number with commas
+                                labelExpr="'¥' + format(datum.value, ',')", 
+                                grid=True
+                            ),
+                            title=None
+                        )
+                    )
 
-            # 4. The selector dot (now filled)
-            points = base.mark_point(filled=True, size=100).encode( # added filled=True
-                opacity=alt.condition(hover, alt.value(1), alt.value(0)),
-                tooltip=[
-                    alt.Tooltip("TransactionYear:Q", title="Year", format="d"),
-                    alt.Tooltip("TradePriceYen:Q", title="Price", format=",")
-                ]
-            ).add_params(hover)
+                    line = base.mark_line(color='#1E90FF') # Using your blue theme color
+                    points = base.mark_point(filled=True, size=100, color='#1E90FF').encode(
+                        opacity=alt.condition(hover, alt.value(1), alt.value(0)),
+                        tooltip=[
+                            alt.Tooltip("TransactionYear:Q", title="Year", format="d"),
+                            alt.Tooltip("TradePriceYen:Q", title="Price", format=",")
+                        ]
+                    ).add_params(hover)
 
-            # 5. Combine and display
-            st.altair_chart(line + points, use_container_width=True)
-        else:
-            st.info("No transaction data available.")
+                    st.altair_chart(line + points, use_container_width=True)
+                else:
+                    st.info("No transaction data available for this selection.")
+
+            with col_chat:
+                st.subheader("AI Advisor")
+                
+                # 1. Initialize chat history in session state if it doesn't exist
+                if "messages" not in st.session_state:
+                    st.session_state.messages = [
+                        {"role": "assistant", "content": f"Ready when you are. What's on your radar today?"}
+                    ]
+
+                # 2. Define a function to handle the input and clear the box
+                def handle_input():
+                    user_text = st.session_state.chat_input_key
+                    if user_text:
+                        # Append user message
+                        st.session_state.messages.append({"role": "user", "content": user_text})
+                        # Append placeholder assistant response
+                        st.session_state.messages.append({"role": "assistant", "content": "I'm processing that based on Tokyo market data..."})
+                        # Clear the input box by resetting its key
+                        st.session_state.chat_input_key = ""
+
+                # 3. Chat History Container (Fixed height with scrolling)
+                chat_container = st.container(height=350)
+                
+                with chat_container:
+                    for msg in st.session_state.messages:
+                        st.chat_message(msg["role"]).write(msg["content"])
+
+                # 4. Chat Input
+                # The 'on_change' trigger calls our function the moment Enter is pressed
+                st.text_input(
+                    label="Chat Input", 
+                    placeholder=f"Ask a question about {municipality}...", 
+                    label_visibility="collapsed",
+                    key="chat_input_key",
+                    on_change=handle_input
+                )
 
     if submit:
         try:
