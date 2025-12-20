@@ -1,5 +1,5 @@
 # Tokyo Real Estate Smart Advisor
-Machine learning pipeline and Streamlit dashboard with LLM interactivity for Tokyo residential price intelligence. It estimates market value with an XGBoost model, shows historical transaction prices, and lets you chat with an AI advisor via the OpenRouter API.
+Machine learning pipeline and Streamlit dashboard with LLM interactivity for Tokyo residential real estate price intelligence. It estimates market value with an XGBoost model, shows historical transaction prices, and lets you chat with an AI advisor via the OpenRouter API.
 
 ## Highlights
 - Data ingestion from the MLIT Real Estate Information Library, plus cleaning and feature engineering tailored to residential properties.
