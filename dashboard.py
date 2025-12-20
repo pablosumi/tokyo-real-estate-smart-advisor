@@ -31,7 +31,7 @@ def main():
     price_chart_container = st.container()
 
     with st.form("valuation_form"):
-        tab1, tab2, tab3 = st.tabs(["Context & Usage", "Building Specs", "Land & Zoning"])
+        tab1, tab2 = st.tabs(["Basic Info", "Advanced Specs"])
 
         with tab1:
             col1, col2 = st.columns(2)
@@ -101,15 +101,6 @@ def main():
 
                 total_floor_area = st.number_input("Total Floor Area (m²)", min_value=1.0, value=65.0)
 
-            with col2:
-                structure = st.selectbox("Structure", options=[None, 'RC', 'SRC', 'W', 'S', 'RC, W', 'RC, S', 'SRC, RC', 'LS',
-                                                                'S, W', 'B', 'RC, W, B', 'W, LS', 'RC, S, W', 'RC, LS', 'SRC, W',
-                                                                'S, B', 'SRC, S', 'W, B', 'B, LS', 'S, W, LS', 'RC, B', 'S, LS',
-                                                                'S, W, B', 'RC, S, LS'])
-
-        with tab3:
-            col1, col2 = st.columns(2)
-            with col1:
                 land_shape = st.selectbox("Land Shape", options=[None, 'Irregular Shaped', 'Semi-rectangular Shaped',
                                                                 'Rectangular Shaped', 'Trapezoidal Shaped', 'Semi-square Shaped',
                                                                 'Semi-trapezoidal Shaped', 'Square Shaped', 'Semi-shaped',
@@ -118,7 +109,14 @@ def main():
                 breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=4.0)
                 road_direction = st.selectbox("Road Direction", options=[None, 'East', 'No facing road', 'North', 'Northeast',
                                                                         'Northwest', 'South', 'Southeast', 'Southwest', 'West'])
+                
+
             with col2:
+                structure = st.selectbox("Structure", options=[None, 'RC', 'SRC', 'W', 'S', 'RC, W', 'RC, S', 'SRC, RC', 'LS',
+                                                                'S, W', 'B', 'RC, W, B', 'W, LS', 'RC, S, W', 'RC, LS', 'SRC, W',
+                                                                'S, B', 'SRC, S', 'W, B', 'B, LS', 'S, W, LS', 'RC, B', 'S, LS',
+                                                                'S, W, B', 'RC, S, LS'])
+                
                 classification = st.selectbox("Road Classification", options=[None, 'Access Road', 'Agricultural Road', 'City Road', 'Forest Road',
                                                                             'Hokkaido Prefectural Road', 'Kyoto/ Osaka Prefectural Road',
                                                                             'National Road', 'Prefectural Road', 'Private Road', 'Public Road',
