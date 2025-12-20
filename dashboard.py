@@ -286,43 +286,37 @@ def main():
                         {"role": "assistant", "content": f"Ready when you are. What's on your radar?"}
                     ]
 
-                # 2. Define a function to handle the input and clear the box
-                def handle_input():
-                    user_text = st.session_state.chat_input_key.strip()
-                    if not user_text:
-                        return
-
-                    st.session_state.messages.append({"role": "user", "content": user_text})
-                    st.session_state.chat_input_key = ""
-
-                    try:
-                        with st.spinner("Consulting the AI advisor..."):
-                            assistant_reply = get_chat_completion(
-                                history=st.session_state.messages,
-                                property_context=user_input,
-                            )
-                    except Exception as exc:
-                        assistant_reply = "Sorry, I could not reach the AI advisor just now. Please try again."
-                        st.error(f"Chat error: {exc}")
-
-                    st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
-
-                # 3. Chat History Container (Fixed height with scrolling)
+                # 2. Chat History Container (Fixed height with scrolling)
                 chat_container = st.container(height=350)
                 
                 with chat_container:
                     for msg in st.session_state.messages:
                         st.chat_message(msg["role"]).write(msg["content"])
 
-                # 4. Chat Input
-                # The 'on_change' trigger calls our function the moment Enter is pressed
-                st.text_input(
-                    label="Chat Input", 
-                    placeholder=f"Ask a question about {municipality}...", 
-                    label_visibility="collapsed",
-                    key="chat_input_key",
-                    on_change=handle_input
-                )
+                # 3. Chat Input
+                prompt = st.chat_input(placeholder=f"Ask a question about {municipality}...")
+
+                if prompt:
+                    st.session_state.messages.append({"role": "user", "content": prompt})
+
+                    # Inline loading indicator inside the chat box (no global overlay)
+                    with chat_container:
+                        loading_placeholder = st.chat_message("assistant")
+                        loading_placeholder.markdown("Thinking...")
+
+                    try:
+                        assistant_reply = get_chat_completion(
+                            history=st.session_state.messages,
+                            property_context=user_input,
+                        )
+                    except Exception as exc:
+                        assistant_reply = "Sorry, I could not reach the AI advisor just now. Please try again."
+                        st.error(f"Chat error: {exc}")
+
+                    # Replace loading indicator with the real response
+                    loading_placeholder.empty()
+                    st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
+                    st.rerun()
 
     if submit:
         try:
