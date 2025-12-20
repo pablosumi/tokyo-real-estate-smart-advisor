@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from pathlib import Path
 from src.inference import make_prediction
+from src.chat import get_chat_completion
 import altair as alt
 from datetime import date
 
@@ -287,14 +288,24 @@ def main():
 
                 # 2. Define a function to handle the input and clear the box
                 def handle_input():
-                    user_text = st.session_state.chat_input_key
-                    if user_text:
-                        # Append user message
-                        st.session_state.messages.append({"role": "user", "content": user_text})
-                        # Append placeholder assistant response
-                        st.session_state.messages.append({"role": "assistant", "content": "I'm processing that based on Tokyo market data..."})
-                        # Clear the input box by resetting its key
-                        st.session_state.chat_input_key = ""
+                    user_text = st.session_state.chat_input_key.strip()
+                    if not user_text:
+                        return
+
+                    st.session_state.messages.append({"role": "user", "content": user_text})
+                    st.session_state.chat_input_key = ""
+
+                    try:
+                        with st.spinner("Consulting the AI advisor..."):
+                            assistant_reply = get_chat_completion(
+                                history=st.session_state.messages,
+                                property_context=user_input,
+                            )
+                    except Exception as exc:
+                        assistant_reply = "Sorry, I could not reach the AI advisor just now. Please try again."
+                        st.error(f"Chat error: {exc}")
+
+                    st.session_state.messages.append({"role": "assistant", "content": assistant_reply})
 
                 # 3. Chat History Container (Fixed height with scrolling)
                 chat_container = st.container(height=350)
