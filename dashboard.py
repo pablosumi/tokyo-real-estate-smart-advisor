@@ -4,11 +4,12 @@ import pandas as pd
 from pathlib import Path
 from src.inference import make_prediction
 import altair as alt
+from datetime import date
 
 # --- PAGE CONFIG ---
 st.set_page_config(
     page_title="Tokyo Real Estate Advisor",
-    page_icon="🏠",
+    page_icon="📈",
     layout="wide"
 )
 
@@ -73,57 +74,55 @@ def main():
                         '新島村 (Niijima Village)', '三宅村 (Miyake Village)',
                         '八丈町 (Hachijo Town)', '小笠原村 (Ogasawara Village)'
                     ])
-                prop_type = st.selectbox("Type", options=['Pre-owned Condominiums, etc.',
-                                                          'Residential Land(Land and Building)'])
                 
-                floor_plan = st.selectbox("Floor Plan", options=[None, '1K', '3DK', '1R', '2LDK', '1LDK', '1DK', '3LDK', '2DK',
-                                                                'Open Floor', '4LDK', '1LDK+S', '2K', '1K+S', 'Studio Apartment',
-                                                                '3LK', 'Duplex', '3LDK+S', '2LDK+S', '4LDK+S', '3K', '5LDK',
-                                                                '3DK+S', '4DK', '2DK+S', '6LDK', '2LK', '7LDK', '1DK+S', '1LK',
-                                                                '3LD', '1R+S', '4K', '4DK+S', '2LK+S', '2LD+S', '3LD+S', '2K+S',
-                                                                '5LDK+S', '2LD', '5DK', '1L+S', '6LDK+S', '3LDK+K', '1L', '6DK',
-                                                                '1LK+S', '8LDK', '5LK', '5K', '6DK+S', '7LDK+S', '3K+S', '7DK',
-                                                                '6K', '1LDK+K', '5K+S', '5DK+S', '3LK+S', '4K+S', '8LDK+S', '2L+S',
-                                                                '4LK', '6K+S', '1LD+S', '6LK', '4L+K'])
+                floor_plan = st.selectbox("Floor Plan", options=['1DK', '1DK+S', '1K', '1K+S', '1L', '1L+S', '1LD+S', '1LDK', '1LDK+K', '1LDK+S',
+                                                                 '1LK', '1LK+S', '1R', '1R+S', '2DK', '2DK+S', '2K', '2K+S', '2L+S', '2LD', '2LD+S',
+                                                                 '2LDK', '2LDK+S', '2LK', '2LK+S', '3DK', '3DK+S', '3K', '3K+S', '3LD', '3LD+S',
+                                                                 '3LDK', '3LDK+K', '3LDK+S', '3LK', '3LK+S', '4DK', '4DK+S', '4K', '4K+S', '4L+K',
+                                                                 '4LDK', '4LDK+S', '4LK', '5DK', '5DK+S', '5K', '5K+S', '5LDK', '5LDK+S', '5LK',
+                                                                 '6DK', '6DK+S', '6K', '6K+S', '6LDK', '6LDK+S', '6LK', '7DK', '7LDK', '7LDK+S',
+                                                                 '8LDK', '8LDK+S', 'Duplex', 'Open Floor', 'Studio Apartment', None])
 
             with col2:
-                building_year = st.number_input("Building Construction Year", min_value=1945, max_value=2030, value=2010)
-
-                region = st.selectbox("Region", options=[None, 'Commercial Area', 'Residential Area',
-                                                         'Industrial Area', 'Potential Residential Area'])
+                building_year = st.number_input("Building Construction Year", min_value=1945, max_value=2030, value=2003)
                 
-                area = st.number_input("Area (m²)", min_value=1.0, value=65.0)
+                area = st.number_input("Area (m²)", min_value=1.0, value=40.0)
 
 
         with tab2:
             col1, col2 = st.columns(2)
             with col1:
 
-                total_floor_area = st.number_input("Total Floor Area (m²)", min_value=1.0, value=65.0)
+                prop_type = st.selectbox("Type", options=[None, 'Pre-owned Condominiums, etc.', 'Residential Land(Land and Building)'])
 
-                land_shape = st.selectbox("Land Shape", options=[None, 'Irregular Shaped', 'Semi-rectangular Shaped',
-                                                                'Rectangular Shaped', 'Trapezoidal Shaped', 'Semi-square Shaped',
-                                                                'Semi-trapezoidal Shaped', 'Square Shaped', 'Semi-shaped',
-                                                                '&quot;Flag-shaped&quot; etc.'])
-                frontage = st.number_input("Frontage (m)", min_value=0.0, max_value=50.0, value=10.0)
-                breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=4.0)
-                road_direction = st.selectbox("Road Direction", options=[None, 'East', 'No facing road', 'North', 'Northeast',
-                                                                        'Northwest', 'South', 'Southeast', 'Southwest', 'West'])
-                
+                region = st.selectbox("Region", options=[None, 'Commercial Area', 'Industrial Area', 'Potential Residential Area', 'Residential Area'])
 
-            with col2:
                 structure = st.selectbox("Structure", options=[None, 'RC', 'SRC', 'W', 'S', 'RC, W', 'RC, S', 'SRC, RC', 'LS',
                                                                 'S, W', 'B', 'RC, W, B', 'W, LS', 'RC, S, W', 'RC, LS', 'SRC, W',
                                                                 'S, B', 'SRC, S', 'W, B', 'B, LS', 'S, W, LS', 'RC, B', 'S, LS',
                                                                 'S, W, B', 'RC, S, LS'])
+                
+                land_shape = st.selectbox("Land Shape", options=[None, 'Irregular Shaped', 'Semi-rectangular Shaped',
+                                                                'Rectangular Shaped', 'Trapezoidal Shaped', 'Semi-square Shaped',
+                                                                'Semi-trapezoidal Shaped', 'Square Shaped', 'Semi-shaped'])
+                
+                road_direction = st.selectbox("Road Direction", options=[None, 'East', 'No facing road', 'North', 'Northeast',
+                                                                        'Northwest', 'South', 'Southeast', 'Southwest', 'West'])
                 
                 classification = st.selectbox("Road Classification", options=[None, 'Access Road', 'Agricultural Road', 'City Road', 'Forest Road',
                                                                             'Hokkaido Prefectural Road', 'Kyoto/ Osaka Prefectural Road',
                                                                             'National Road', 'Prefectural Road', 'Private Road', 'Public Road',
                                                                             'Road', 'Tokyo Metropolitan Road', 'Town Road', 'Village Road',
                                                                             'Ward Road'])
+
+            with col2:
+                
+                total_floor_area = st.number_input("Total Floor Area (m²)", min_value=1.0, value=310.0)
+                frontage = st.number_input("Frontage (m)", min_value=0.0, max_value=50.0, value=10.0)
+                breadth = st.number_input("Road Breadth (m)", min_value=0.0, max_value=100.0, value=4.0)
                 coverage_ratio = st.slider("Coverage Ratio (%)", 0, 500, 60)
                 floor_area_ratio = st.slider("Floor Area Ratio (%)", 0, 1300, 200)
+
 
         st.divider()
         submit = st.form_submit_button("Calculate Estimate", type="primary", use_container_width=True)
@@ -143,7 +142,8 @@ def main():
         'Classification': classification,
         'Breadth': breadth,
         'CoverageRatio': coverage_ratio,
-        'FloorAreaRatio': floor_area_ratio
+        'FloorAreaRatio': floor_area_ratio,
+        'TransactionYear': date.today().year
     }
 
     median_price = (
