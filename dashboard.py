@@ -114,9 +114,12 @@ def main():
                 }
             </style>
         """, unsafe_allow_html=True)
+    
+    
 
     transactions = load_transaction_data()
     price_chart_container = st.container()
+    result_placeholder = st.container()
 
     with st.form("valuation_form"):
         tab1, tab2 = st.tabs(["Basic Info", "Advanced Specs"])
@@ -279,7 +282,7 @@ def main():
                 # 1. Initialize chat history in session state if it doesn't exist
                 if "messages" not in st.session_state:
                     st.session_state.messages = [
-                        {"role": "assistant", "content": f"Ready when you are. What's on your radar today?"}
+                        {"role": "assistant", "content": f"Ready when you are. What's on your radar?"}
                     ]
 
                 # 2. Define a function to handle the input and clear the box
@@ -312,10 +315,13 @@ def main():
 
     if submit:
         try:
-            with st.spinner("Processing..."):
-                predicted_price = make_prediction(user_input)
-            st.success("Estimation complete")
-            st.metric(label="Predicted Market Value", value=f"¥{predicted_price:,.0f}")
+            predicted_price = make_prediction(user_input)
+            
+            with result_placeholder:
+                st.success(f"Predicted Market Value: ¥{predicted_price:,.0f}")
+                #st.metric(label="", value=f"¥{predicted_price:,.0f}")
+                #st.divider() # Optional: visually separates result from the form
+                
         except Exception as e:
             st.error(f"Error: {e}")
 
