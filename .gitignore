@@ -9,18 +9,20 @@ venv/
 notebooks/.ipynb_checkpoints/
 
 # data
-data/
+data/*
+!data/.gitkeep
 
 # models
-models/
+models/*
+!models/.gitkeep
 
 # system & python
 __pycache__/
 *.pyc
 
 # logs
-logs/
-*.log
+logs/*
+!logs/.gitkeep
 
 # misc
 .DS_Store
