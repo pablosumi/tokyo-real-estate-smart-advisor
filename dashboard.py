@@ -127,7 +127,7 @@ def main():
                     coverage_ratio = st.slider("Coverage Ratio (%)", 0, 500, 60)
                     floor_area_ratio = st.slider("Floor Area Ratio (%)", 0, 1300, 200)
 
-            submit = st.form_submit_button("Calculate Estimate", type="primary", use_container_width=True)
+            submit = st.form_submit_button("Calculate Estimate", type="primary", width="stretch")
 
     # Context object
     user_input = {
@@ -149,7 +149,7 @@ def main():
     
     # 1. Prediction Result (Now below chart/chat due to container definition order)
     if st.session_state.prediction:
-        result_area.success(f"Predicted Market Value: ¥{st.session_state.prediction:,.0f}")
+        result_area.success(f"Estimated Market Value: ¥{st.session_state.prediction:,.0f}")
 
     # 2. Chart Section
     with col_chart:
@@ -167,7 +167,7 @@ def main():
                 opacity=alt.condition(hover, alt.value(1), alt.value(0)),
                 tooltip=[alt.Tooltip("TransactionYear:Q", title="Year"), alt.Tooltip("TradePriceYen:Q", title="Price", format=",")]
             ).add_params(hover)
-            st.altair_chart(chart + points, use_container_width=True)
+            st.altair_chart(chart + points, width="stretch")
         else:
             st.info("No transaction data available for this selection.")
 
